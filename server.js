@@ -20,9 +20,18 @@ app.post("/Voice", function (req, res) {
     res.end(twiml.toString());
 });
 
-app.post("/Recorded", function(req, res){
-    res.end();
-    console.log(req.body);
+app.post("/Recorded", function(req, res){    
+    res.end();    
+    var recordingUrl = req.body.RecordingUrl;
+    var speechToText = require("./SpeechToText");
+
+    speechToText.getTextFromVoice(recordingUrl)
+    .then(transcription => {
+        console.log(transcription);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 });
 
 app.use("/", function(req, res){
