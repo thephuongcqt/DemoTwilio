@@ -25,5 +25,9 @@ app.post("/Recorded", function(req, res){
     console.log(req.body);
 });
 
+app.use("/", function(req, res){
+    res.end("default route");
+});
+
 var server = app.listen(process.env.PORT || 8080, function(){
 });
