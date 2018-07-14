@@ -6,7 +6,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.post("/Voice", function (req, res) {
+app.post("/Voice", function (req, response) {
     // res.set('Content-Type', 'text/xml');
     // const VoiceResponse = require('twilio').twiml.VoiceResponse;
     // const twiml = new VoiceResponse();
@@ -32,7 +32,7 @@ app.post("/Voice", function (req, res) {
   response.type('text/xml');
   response.send(twiml.toString());
 
-  
+
 });
 
 app.post("/Recorded", function(req, res){    
