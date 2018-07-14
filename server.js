@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 
 app.post("/Voice", function (req, response) {
     // res.set('Content-Type', 'text/xml');
-    // const VoiceResponse = require('twilio').twiml.VoiceResponse;
+    const VoiceResponse = require('twilio').twiml.VoiceResponse;
     // const twiml = new VoiceResponse();
     // var recordURL = req.protocol + '://' + req.get('host') + '/Recorded';    
 
