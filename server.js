@@ -21,38 +21,45 @@ app.post("/Voice", function (req, response) {
 
     const twiml = new VoiceResponse();
 
-  // Use the <Gather> verb to collect user input
-  const gather = twiml.gather({ numDigits: 1 });
-  gather.say('For sales, press 1. For support, press 2.');
+    // Use the <Gather> verb to collect user input
+    const gather = twiml.gather({
+        input: 'speech dtmf',
+        numDigits: '1',
+        timeout: 10,
+        action: '/completed'
+    });
+    gather.say('For sales, press 1. For support, press 2.');
 
-  // If the user doesn't enter input, loop
-  twiml.redirect('/voice');
+    // If the user doesn't enter input, loop
+    //   gather.say('Welcome to Twilio, please tell us why you\'re calling');
 
-  // Render the response as XML in reply to the webhook request
-  response.type('text/xml');
-  response.send(twiml.toString());
-
-
+    // Render the response as XML in reply to the webhook request
+    response.type('text/xml');
+    response.send(twiml.toString());
 });
 
-app.post("/Recorded", function(req, res){    
-    res.end();    
+app.post("/completed", function (req, res) {
+    console.log(req.body);
+});
+
+app.post("/Recorded", function (req, res) {
+    res.end();
     var recordingUrl = req.body.RecordingUrl;
     var speechToText = require("./SpeechToText");
 
     speechToText.getTextFromVoice(recordingUrl)
-    .then(transcription => {
-        console.log(transcription);
-    })
-    .catch(err => {
-        console.log(err);
-    })
+        .then(transcription => {
+            console.log(transcription);
+        })
+        .catch(err => {
+            console.log(err);
+        })
 });
 
-app.use("/", function(req, res){
+app.use("/", function (req, res) {
     res.end("default route");
 });
 
-var server = app.listen(process.env.PORT || 8080, function(){
+var server = app.listen(process.env.PORT || 8080, function () {
     console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
