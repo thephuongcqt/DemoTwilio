@@ -7,17 +7,32 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.post("/Voice", function (req, res) {
-    res.set('Content-Type', 'text/xml');
-    const VoiceResponse = require('twilio').twiml.VoiceResponse;
-    const twiml = new VoiceResponse();
-    var recordURL = req.protocol + '://' + req.get('host') + '/Recorded';    
+    // res.set('Content-Type', 'text/xml');
+    // const VoiceResponse = require('twilio').twiml.VoiceResponse;
+    // const twiml = new VoiceResponse();
+    // var recordURL = req.protocol + '://' + req.get('host') + '/Recorded';    
 
-    twiml.play("https://firebasestorage.googleapis.com/v0/b/callcenter2-79faf.appspot.com/o/audio%2Fdefault_greeting.mp3?alt=media&token=d91ed4a4-8a8e-4747-a047-d15397a9e15f");
-    twiml.record({
-        recordingStatusCallback: recordURL,
-        method: 'POST',
-    });
-    res.end(twiml.toString());
+    // twiml.play("https://firebasestorage.googleapis.com/v0/b/callcenter2-79faf.appspot.com/o/audio%2Fdefault_greeting.mp3?alt=media&token=d91ed4a4-8a8e-4747-a047-d15397a9e15f");
+    // twiml.record({
+    //     recordingStatusCallback: recordURL,
+    //     method: 'POST',
+    // });
+    // res.end(twiml.toString());
+
+    const twiml = new VoiceResponse();
+
+  // Use the <Gather> verb to collect user input
+  const gather = twiml.gather({ numDigits: 1 });
+  gather.say('For sales, press 1. For support, press 2.');
+
+  // If the user doesn't enter input, loop
+  twiml.redirect('/voice');
+
+  // Render the response as XML in reply to the webhook request
+  response.type('text/xml');
+  response.send(twiml.toString());
+
+  
 });
 
 app.post("/Recorded", function(req, res){    
